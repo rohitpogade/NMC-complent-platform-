@@ -1,0 +1,451 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071225">
+  <meta name="description" content="Register a civic complaint in the NMC Complaint Register student project.">
+  <title>Register Complaint | NMC Citizen Portal</title>
+  <link rel="stylesheet" href="style.css">  <style>
+    .page-hero {
+      padding: 55px 7% 25px;
+      text-align: center;
+    }
+
+    .page-hero h1 {
+      font-size: clamp(32px, 5vw, 48px);
+      letter-spacing: -1.5px;
+    }
+
+    .page-hero h1 span {
+      color: var(--blue);
+    }
+
+    .page-hero p {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    .form-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 25px 20px 80px;
+    }
+
+    .form-panel {
+      padding: clamp(22px, 5vw, 38px);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+    }
+
+    .form-panel h2 {
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+
+    .form-note {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 28px;
+      line-height: 1.7;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+      min-width: 0;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .field label {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      padding: 13px 14px;
+      color: var(--text);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      font: inherit;
+      font-size: 13px;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .field select option {
+      background: var(--panel);
+      color: var(--text);
+    }
+
+    .field textarea {
+      min-height: 125px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px #69a5ff20;
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder {
+      color: var(--muted);
+      opacity: .8;
+    }
+
+    .submit-btn {
+      width: 100%;
+      justify-content: center;
+      border: 0;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+      color: white;
+    }
+
+    .submit-btn:disabled {
+      opacity: .65;
+      cursor: wait;
+    }
+
+    .result {
+      display: none;
+      margin-top: 22px;
+      padding: 20px;
+      border-radius: 14px;
+      background: #163a36;
+      border: 1px solid #4ccda066;
+      overflow-wrap: anywhere;
+    }
+
+    .result.show {
+      display: block;
+      animation: menuIn .3s ease;
+    }
+
+    .result p {
+      font-size: 13px;
+      margin-top: 8px;
+      line-height: 1.6;
+    }
+
+    .result-id {
+      font-size: 22px;
+      font-weight: 800;
+      color: #85f0c0;
+      margin: 10px 0 14px;
+      overflow-wrap: anywhere;
+    }
+
+    .result a {
+      display: inline-block;
+      color: #a8c9ff;
+      text-decoration: underline;
+      font-size: 12px;
+      margin-top: 12px;
+    }
+
+    .copy-btn {
+      cursor: pointer;
+      border: 1px solid #ffffff30;
+      border-radius: 9px;
+      padding: 10px 14px;
+      color: white;
+      background: #ffffff12;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .copy-btn:hover {
+      background: #ffffff20;
+    }
+
+    .form-error {
+      display: none;
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 10px;
+      background: #48262e;
+      color: #ffb5bf;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .form-error.show {
+      display: block;
+    }
+
+    .demo-note {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 20px;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 600px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .page-hero {
+        padding-top: 40px;
+      }
+
+      .form-wrap {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .result.show {
+        animation: none;
+      }
+    }
+  </style></head><body><header class="navbar">
+  <a class="logo" href="index.html">
+    <span class="logo-icon">N</span>
+    <span>NMC <small>Citizen Portal</small></span>
+  </a><button
+class="menu-toggle"
+id="menuToggle"
+type="button"
+aria-label="Toggle navigation"
+aria-expanded="false"
+aria-controls="navLinks">☰</button>
+
+  <nav class="nav-links" id="navLinks">
+    <a href="index.html">Home</a>
+    <a href="index.html#services">Services</a>
+    <a class="active" href="complaint.html" aria-current="page">Complaint</a>
+    <a href="track.html">Track Status</a>
+  </nav><a href="track.html" class="nav-btn">Track Complaint ↗</a>
+
+</header><main>
+  <section class="page-hero reveal">
+    <span class="eyebrow">CITIZEN SUPPORT</span>
+    <h1>Register a <span>Complaint.</span></h1>
+    <p>Tell us about the civic issue you want to report.</p>
+  </section>  <div class="form-wrap reveal">
+    <form class="form-panel" id="complaintForm">
+      <h2>Complaint Details</h2>
+      <p class="form-note">
+        Complete the form below to create a complaint record in this demo.
+        Fields marked with * are required.
+      </p>  <div class="form-grid">
+    <div class="field">
+      <label for="citizenName">Your Name *</label>
+      <input
+        id="citizenName"
+        name="citizenName"
+        type="text"
+        autocomplete="name"
+        required
+        maxlength="80"
+        placeholder="Enter your name">
+    </div>
+
+    <div class="field">
+      <label for="category">Complaint Category *</label>
+      <select id="category" name="category" required>
+        <option value="">Select category</option>
+        <option value="Garbage Collection">Garbage Collection</option>
+        <option value="Road Damage">Road Damage</option>
+        <option value="Water Supply">Water Supply</option>
+        <option value="Streetlight Issue">Streetlight Issue</option>
+        <option value="Drainage Problem">Drainage Problem</option>
+        <option value="Public Cleanliness">Public Cleanliness</option>
+        <option value="Other Civic Issue">Other Civic Issue</option>
+      </select>
+    </div>
+
+    <div class="field full">
+      <label for="location">Issue Location *</label>
+      <input
+        id="location"
+        name="location"
+        type="text"
+        required
+        maxlength="180"
+        placeholder="Area, street or nearby landmark">
+    </div>
+
+    <div class="field full">
+      <label for="description">Describe the Problem *</label>
+      <textarea
+        id="description"
+        name="description"
+        required
+        minlength="10"
+        maxlength="1500"
+        placeholder="Explain the issue and where it occurs..."></textarea>
+    </div>
+  </div>
+
+  <button type="submit" class="primary-btn submit-btn" id="submitBtn">
+    Submit Complaint →
+  </button>
+
+  <div class="form-error" id="formError" role="alert"></div>
+
+  <div class="result" id="result" role="status" aria-live="polite">
+    <strong>Complaint registered successfully!</strong>
+    <p>Your demo complaint ID is:</p>
+
+    <div class="result-id" id="complaintId"></div>
+
+    <button type="button" class="copy-btn" id="copyId">
+      Copy Complaint ID
+    </button>
+
+    <p>Keep this ID to look up your complaint record.</p>
+    <a href="track.html">Go to Track Complaint →</a>
+  </div>
+
+  <p class="demo-note">
+    Academic demonstration only. This form stores data in this browser
+    and does not send complaints to NMC or notify municipal officials.
+    Avoid entering sensitive personal information.
+  </p>
+</form>
+
+  </div>
+</main><footer class="footer">
+  <a class="logo" href="index.html">
+    <span class="logo-icon">N</span>
+    <span>NMC <small>Citizen Portal</small></span>
+  </a>  <p>Student Project · <span id="year"></span></p>
+  <a href="index.html">Back to Home ↑</a>
+</footer><script src="script.js"></script><script>
+(function () {
+  const form = document.getElementById("complaintForm");
+  const result = document.getElementById("result");
+  const complaintId = document.getElementById("complaintId");
+  const formError = document.getElementById("formError");
+  const submitBtn = document.getElementById("submitBtn");
+  const copyBtn = document.getElementById("copyId");
+
+  let currentId = "";
+
+  function readRecords() {
+    const stored = localStorage.getItem("nmcComplaints");
+
+    if (!stored) return [];
+
+    const parsed = JSON.parse(stored);
+
+    if (!Array.isArray(parsed)) {
+      throw new Error("Stored complaint data is invalid.");
+    }
+
+    return parsed;
+  }
+
+  function createComplaintId(records) {
+    let id;
+
+    do {
+      const randomPart = Math.random()
+        .toString(36)
+        .slice(2, 8)
+        .toUpperCase();
+
+      id = "NMC-" + Date.now().toString().slice(-8) + randomPart;
+    } while (records.some(item => item && item.id === id));
+
+    return id;
+  }
+
+  function showError(text) {
+    formError.textContent = text;
+    formError.classList.add("show");
+  }
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    if (!form.reportValidity()) return;
+
+    formError.textContent = "";
+    formError.classList.remove("show");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Saving...";
+
+    try {
+      const records = readRecords();
+      const id = createComplaintId(records);
+
+      const complaint = {
+        id: id,
+        name: document.getElementById("citizenName").value.trim(),
+        category: document.getElementById("category").value,
+        location: document.getElementById("location").value.trim(),
+        description: document.getElementById("description").value.trim(),
+        status: "Submitted",
+        date: new Date().toLocaleString()
+      };
+
+      records.push(complaint);
+
+      // Save first. Show success only if saving succeeds.
+      localStorage.setItem("nmcComplaints", JSON.stringify(records));
+
+      currentId = id;
+      complaintId.textContent = currentId;
+      result.classList.add("show");
+
+      form.reset();
+      result.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    } catch (error) {
+      showError(
+        "The complaint could not be saved in this browser. " +
+        "Check browser storage settings and try again."
+      );
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Submit Complaint →";
+    }
+  });
+
+  copyBtn.addEventListener("click", async function () {
+    if (!currentId) return;
+
+    try {
+      await navigator.clipboard.writeText(currentId);
+      copyBtn.textContent = "Copied ✓";
+    } catch (error) {
+      window.prompt("Copy your complaint ID:", currentId);
+    }
+
+    window.setTimeout(function () {
+      copyBtn.textContent = "Copy Complaint ID";
+    }, 2000);
+  });
+})();
+</script></body>
+</html>

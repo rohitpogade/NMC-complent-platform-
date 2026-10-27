@@ -1,0 +1,437 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071225">
+  <meta name="description" content="Track a complaint in the NMC Complaint Register student project.">
+  <title>Track Complaint | NMC Citizen Portal</title>
+  <link rel="stylesheet" href="style.css">  <style>
+    .page-hero {
+      padding: 55px 7% 25px;
+      text-align: center;
+    }
+
+    .page-hero h1 {
+      font-size: clamp(32px, 5vw, 48px);
+      letter-spacing: -1.5px;
+    }
+
+    .page-hero h1 span {
+      color: var(--blue);
+    }
+
+    .page-hero p {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 10px;
+      line-height: 1.7;
+    }
+
+    .track-wrap {
+      max-width: 700px;
+      padding: 25px 20px 85px;
+      margin: auto;
+    }
+
+    .track-panel {
+      padding: clamp(23px, 5vw, 38px);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+    }
+
+    .track-panel h2 {
+      font-size: 22px;
+    }
+
+    .track-panel > p {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+      margin: 8px 0 25px;
+    }
+
+    .search-form {
+      display: flex;
+      gap: 10px;
+    }
+
+    .search-form input {
+      flex: 1;
+      min-width: 0;
+      padding: 14px;
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      outline: none;
+      font: inherit;
+      font-size: 13px;
+    }
+
+    .search-form input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px #69a5ff20;
+    }
+
+    .search-form input::placeholder {
+      color: var(--muted);
+      opacity: .8;
+    }
+
+    .search-form button {
+      border: 0;
+      color: white;
+      cursor: pointer;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .message {
+      display: none;
+      padding: 14px;
+      margin-top: 20px;
+      border-radius: 11px;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .message.show {
+      display: block;
+      animation: menuIn .25s ease;
+    }
+
+    .message.error {
+      background: #48262e;
+      color: #ffb5bf;
+    }
+
+    .message.success {
+      background: #163a36;
+      color: #a3f0d1;
+    }
+
+    .record {
+      display: none;
+      margin-top: 24px;
+      padding: 23px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow-wrap: anywhere;
+    }
+
+    .record.show {
+      display: block;
+      animation: menuIn .35s ease;
+    }
+
+    .record-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .record-id {
+      color: var(--blue);
+      font-size: 14px;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 6px 11px;
+      border-radius: 20px;
+      background: #234d43;
+      color: #9af0cb;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .record h3 {
+      font-size: 18px;
+      margin: 20px 0 6px;
+    }
+
+    .record-description {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.8;
+      margin-bottom: 22px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .detail {
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+      min-width: 0;
+    }
+
+    .detail small {
+      color: var(--muted);
+      display: block;
+      font-size: 10px;
+      margin-bottom: 5px;
+    }
+
+    .detail strong {
+      font-size: 12px;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+      display: block;
+    }
+
+    .demo-note {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.8;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 500px) {
+      .search-form {
+        flex-direction: column;
+      }
+
+      .search-form button {
+        justify-content: center;
+        width: 100%;
+      }
+
+      .details-grid {
+        grid-template-columns: 1fr;
+        gap: 13px;
+      }
+
+      .track-wrap {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .message.show,
+      .record.show {
+        animation: none;
+      }
+    }
+  </style></head><body><header class="navbar">
+  <a class="logo" href="index.html">
+    <span class="logo-icon">N</span>
+    <span>NMC <small>Citizen Portal</small></span>
+  </a><button
+class="menu-toggle"
+id="menuToggle"
+type="button"
+aria-label="Toggle navigation"
+aria-expanded="false"
+aria-controls="navLinks">☰</button>
+
+  <nav class="nav-links" id="navLinks">
+    <a href="index.html">Home</a>
+    <a href="index.html#services">Services</a>
+    <a href="complaint.html">Complaint</a>
+    <a class="active" href="track.html" aria-current="page">Track Status</a>
+  </nav><a href="complaint.html" class="nav-btn">New Complaint ↗</a>
+
+</header><main>
+  <section class="page-hero reveal">
+    <span class="eyebrow">COMPLAINT STATUS</span>
+    <h1>Track Your <span>Complaint.</span></h1>
+    <p>Enter your complaint ID to find your saved demo record.</p>
+  </section>  <div class="track-wrap reveal">
+    <section class="track-panel">
+      <h2>Find Your Complaint</h2>
+      <p>
+        Enter the ID generated when you registered your complaint.
+        Use the same browser where you submitted it.
+      </p>  <form class="search-form" id="trackForm">
+    <input
+      id="searchId"
+      name="searchId"
+      type="text"
+      maxlength="40"
+      placeholder="Example: NMC-12345678"
+      aria-label="Complaint ID"
+      autocomplete="off"
+      required>
+
+    <button class="primary-btn" type="submit">Search →</button>
+  </form>
+
+  <div
+    id="message"
+    class="message"
+    role="status"
+    aria-live="polite"></div>
+
+  <section
+    id="record"
+    class="record"
+    aria-label="Complaint details"
+    aria-live="polite">
+
+    <div class="record-top">
+      <span class="record-id" id="recordId"></span>
+      <span class="status" id="recordStatus"></span>
+    </div>
+
+    <h3 id="recordCategory"></h3>
+    <p class="record-description" id="recordDescription"></p>
+
+    <div class="details-grid">
+      <div class="detail">
+        <small>Citizen Name</small>
+        <strong id="recordName"></strong>
+      </div>
+
+      <div class="detail">
+        <small>Issue Location</small>
+        <strong id="recordLocation"></strong>
+      </div>
+
+      <div class="detail">
+        <small>Submitted On</small>
+        <strong id="recordDate"></strong>
+      </div>
+
+      <div class="detail">
+        <small>Current Status</small>
+        <strong id="recordStatusText"></strong>
+      </div>
+    </div>
+  </section>
+
+  <p class="demo-note">
+    Academic demo only. This page reads records stored in the current
+    browser. It does not receive live updates from NMC, and the displayed
+    status is not an official municipal status.
+  </p>
+</section>
+
+  </div>
+</main><footer class="footer">
+  <a class="logo" href="index.html">
+    <span class="logo-icon">N</span>
+    <span>NMC <small>Citizen Portal</small></span>
+  </a>  <p>Student Project · <span id="year"></span></p>
+  <a href="index.html">Back to Home ↑</a>
+</footer><script src="script.js"></script><script>
+(function () {
+  const trackForm = document.getElementById("trackForm");
+  const searchId = document.getElementById("searchId");
+  const message = document.getElementById("message");
+  const record = document.getElementById("record");
+
+  function showMessage(text, type) {
+    message.textContent = text;
+    message.className = "message show " + type;
+  }
+
+  function hideRecord() {
+    record.classList.remove("show");
+  }
+
+  function setText(id, value) {
+    const element = document.getElementById(id);
+
+    // Use textContent to display stored user input safely.
+    element.textContent =
+      typeof value === "string" && value.trim()
+        ? value
+        : "Not provided";
+  }
+
+  function readRecords() {
+    const stored = localStorage.getItem("nmcComplaints");
+
+    if (!stored) return [];
+
+    const parsed = JSON.parse(stored);
+
+    if (!Array.isArray(parsed)) {
+      throw new Error("Invalid complaint storage format.");
+    }
+
+    return parsed;
+  }
+
+  trackForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const id = searchId.value.trim().toUpperCase();
+
+    if (!id) {
+      hideRecord();
+      showMessage("Please enter a complaint ID.", "error");
+      return;
+    }
+
+    let records;
+
+    try {
+      records = readRecords();
+    } catch (error) {
+      hideRecord();
+      showMessage(
+        "Saved complaint data could not be read. Try refreshing the page.",
+        "error"
+      );
+      return;
+    }
+
+    const complaint = records.find(function (item) {
+      return (
+        item &&
+        typeof item.id === "string" &&
+        item.id.toUpperCase() === id
+      );
+    });
+
+    if (!complaint) {
+      hideRecord();
+      showMessage(
+        "Complaint not found. Check the ID and make sure you are using the same browser where you registered it.",
+        "error"
+      );
+      return;
+    }
+
+    const status =
+      typeof complaint.status === "string" && complaint.status.trim()
+        ? complaint.status
+        : "Submitted";
+
+    setText("recordId", complaint.id);
+    setText("recordStatus", status);
+    setText("recordCategory", complaint.category);
+    setText("recordDescription", complaint.description);
+    setText("recordName", complaint.name);
+    setText("recordLocation", complaint.location);
+    setText("recordDate", complaint.date);
+    setText("recordStatusText", status);
+
+    message.className = "message";
+    message.textContent = "";
+
+    record.classList.add("show");
+    record.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest"
+    });
+  });
+})();
+</script></body>
+</html>
